@@ -1,0 +1,454 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>San Valentín también es para las amigas</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Comic Sans MS', 'Chalkboard SE', 'Arial Rounded MT Bold', sans-serif;
+        }
+        
+        body {
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            background: linear-gradient(135deg, #ff6b8b 0%, #ff99ac 25%, #dda0dd 50%, #ffd700 100%);
+            background-size: 400% 400%;
+            animation: gradientBG 15s ease infinite;
+            padding: 20px;
+            overflow-x: hidden;
+        }
+        
+        @keyframes gradientBG {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+        
+        .container {
+            text-align: center;
+            max-width: 800px;
+            width: 100%;
+            padding: 30px;
+            background-color: rgba(255, 255, 255, 0.9);
+            border-radius: 25px;
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.2);
+            position: relative;
+            z-index: 10;
+            border: 8px solid #ffd700;
+        }
+        
+        h1 {
+            color: #ff4081;
+            font-size: 2.8rem;
+            margin-bottom: 20px;
+            text-shadow: 3px 3px 0px rgba(255, 215, 0, 0.5);
+        }
+        
+        .subtitle {
+            color: #d81b60;
+            font-size: 1.5rem;
+            margin-bottom: 40px;
+            font-weight: bold;
+        }
+        
+        .question-container {
+            background-color: #fff0f7;
+            padding: 30px;
+            border-radius: 20px;
+            margin: 30px 0;
+            border: 5px dashed #ff99ac;
+            position: relative;
+        }
+        
+        .question {
+            font-size: 2.2rem;
+            color: #c2185b;
+            margin-bottom: 40px;
+            line-height: 1.4;
+        }
+        
+        .buttons-container {
+            display: flex;
+            justify-content: center;
+            gap: 50px;
+            flex-wrap: wrap;
+            margin-top: 30px;
+            position: relative;
+            z-index: 20;
+        }
+        
+        .btn {
+            padding: 25px 50px;
+            font-size: 2rem;
+            font-weight: bold;
+            border: none;
+            border-radius: 50px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+            min-width: 180px;
+            position: relative;
+        }
+        
+        .btn-yes {
+            background: linear-gradient(to bottom, #ff4081, #d81b60);
+            color: white;
+            transform: scale(1);
+            z-index: 30;
+        }
+        
+        .btn-yes:hover {
+            background: linear-gradient(to bottom, #ff79b0, #ff4081);
+            transform: scale(1.05);
+            box-shadow: 0 15px 25px rgba(216, 27, 96, 0.4);
+        }
+        
+        .btn-yes:active {
+            transform: scale(1.1);
+        }
+        
+        .btn-no {
+            background: linear-gradient(to bottom, #6a1b9a, #4a148c);
+            color: white;
+            position: relative;
+            transition: transform 0.3s ease;
+            z-index: 25;
+        }
+        
+        .btn-no:hover {
+            background: linear-gradient(to bottom, #8e24aa, #6a1b9a);
+        }
+        
+        .emoji {
+            font-size: 1.5rem;
+            margin-right: 10px;
+        }
+        
+        .crying-face {
+            position: absolute;
+            font-size: 2rem;
+            z-index: 5;
+            opacity: 0;
+            pointer-events: none;
+        }
+        
+        .message {
+            margin-top: 30px;
+            font-size: 1.8rem;
+            color: #ff4081;
+            font-weight: bold;
+            min-height: 60px;
+            padding: 15px;
+            opacity: 0;
+            transition: opacity 0.5s ease;
+        }
+        
+        .message.show {
+            opacity: 1;
+        }
+        
+        .hearts-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 1;
+        }
+        
+        .heart {
+            position: absolute;
+            color: #ff4081;
+            font-size: 1.5rem;
+            opacity: 0;
+            animation: float 5s linear infinite;
+        }
+        
+        @keyframes float {
+            0% {
+                transform: translateY(100vh) rotate(0deg);
+                opacity: 0;
+            }
+            10% {
+                opacity: 1;
+            }
+            90% {
+                opacity: 1;
+            }
+            100% {
+                transform: translateY(-100px) rotate(360deg);
+                opacity: 0;
+            }
+        }
+        
+        .footer {
+            margin-top: 30px;
+            color: #4a148c;
+            font-size: 1.2rem;
+            font-weight: bold;
+            text-align: center;
+        }
+        
+        @media (max-width: 768px) {
+            h1 {
+                font-size: 2.2rem;
+            }
+            
+            .question {
+                font-size: 1.8rem;
+            }
+            
+            .btn {
+                padding: 20px 40px;
+                font-size: 1.7rem;
+                min-width: 150px;
+            }
+            
+            .buttons-container {
+                gap: 30px;
+            }
+        }
+        
+        @media (max-width: 480px) {
+            h1 {
+                font-size: 1.8rem;
+            }
+            
+            .question {
+                font-size: 1.5rem;
+            }
+            
+            .btn {
+                padding: 18px 35px;
+                font-size: 1.5rem;
+            }
+            
+            .buttons-container {
+                flex-direction: column;
+                align-items: center;
+                gap: 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="hearts-container" id="heartsContainer"></div>
+    
+    <div class="container">
+        <h1>San Valentín también es para las amigas</h1>
+        <p class="subtitle">Porque la amistad es el amor más puro ❤️</p>
+        
+        <div class="question-container">
+            <p class="question"><i class="fas fa-heart emoji"></i> ¿Quieres ser mi San Valentín de amigas? <i class="fas fa-heart emoji"></i></p>
+            
+            <div class="buttons-container">
+                <button class="btn btn-yes" id="yesBtn">
+                    <i class="fas fa-check-circle emoji"></i> ¡Sí!
+                </button>
+                <button class="btn btn-no" id="noBtn">
+                    <i class="fas fa-times-circle emoji"></i> No
+                </button>
+            </div>
+            
+            <div class="message" id="message">
+                ¡Sabía que dirías que sí! Eres la mejor amiga del mundo 💖
+            </div>
+        </div>
+        
+        <div class="footer">
+            <p>Las amigas son como estrellas, no siempre las ves pero siempre sabes que están ahí ✨</p>
+            <p>¡Feliz San Valentín para las mejores amigas! 💕</p>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const yesBtn = document.getElementById('yesBtn');
+            const noBtn = document.getElementById('noBtn');
+            const message = document.getElementById('message');
+            const heartsContainer = document.getElementById('heartsContainer');
+            const container = document.querySelector('.container');
+            
+            let noClickCount = 0;
+            let isYesClicked = false;
+            
+            // Crear corazones flotantes
+            function createHearts() {
+                for (let i = 0; i < 20; i++) {
+                    setTimeout(() => {
+                        const heart = document.createElement('div');
+                        heart.classList.add('heart');
+                        heart.innerHTML = '❤️';
+                        heart.style.left = Math.random() * 100 + 'vw';
+                        heart.style.animationDuration = (Math.random() * 3 + 4) + 's';
+                        heart.style.fontSize = (Math.random() * 20 + 15) + 'px';
+                        heart.style.opacity = Math.random() * 0.5 + 0.5;
+                        heartsContainer.appendChild(heart);
+                        
+                        // Eliminar el corazón después de que termine la animación
+                        setTimeout(() => {
+                            heart.remove();
+                        }, 5000);
+                    }, i * 250);
+                }
+            }
+            
+            // Inicializar corazones flotantes
+            createHearts();
+            setInterval(createHearts, 6000);
+            
+            // Función para mover el botón "No" a una posición aleatoria
+            function moveNoButton() {
+                const containerRect = container.getBoundingClientRect();
+                const buttonRect = noBtn.getBoundingClientRect();
+                
+                // Calcular posición aleatoria dentro del contenedor
+                const maxX = containerRect.width - buttonRect.width - 40;
+                const maxY = containerRect.height - buttonRect.height - 40;
+                
+                let randomX, randomY;
+                
+                // Para las primeras veces, mover menos
+                if (noClickCount < 3) {
+                    randomX = Math.random() * 100 - 50;
+                    randomY = Math.random() * 100 - 50;
+                } 
+                // Después de varios intentos, mover más
+                else {
+                    randomX = Math.random() * maxX;
+                    randomY = Math.random() * maxY;
+                    
+                    // Asegurarse de que no se salga completamente del contenedor
+                    if (randomX < 20) randomX = 20;
+                    if (randomY < 20) randomY = 20;
+                }
+                
+                // Aplicar la transformación
+                noBtn.style.transform = `translate(${randomX}px, ${randomY}px)`;
+                
+                // Hacer que el botón "No" sea más pequeño después de cada intento
+                const scale = Math.max(0.5, 1 - noClickCount * 0.1);
+                noBtn.style.transform += ` scale(${scale})`;
+            }
+            
+            // Crear caritas llorando animadas
+            function createCryingFaces() {
+                const cryingFaces = ['😢', '😭', '🥺', '😔', '😞', '😟', '😿'];
+                
+                for (let i = 0; i < 15; i++) {
+                    setTimeout(() => {
+                        const face = document.createElement('div');
+                        face.classList.add('crying-face');
+                        face.innerHTML = cryingFaces[Math.floor(Math.random() * cryingFaces.length)];
+                        face.style.left = Math.random() * 100 + 'vw';
+                        face.style.top = Math.random() * 100 + 'vh';
+                        face.style.fontSize = (Math.random() * 30 + 20) + 'px';
+                        
+                        document.body.appendChild(face);
+                        
+                        // Animación para que aparezcan y floten
+                        setTimeout(() => {
+                            face.style.opacity = '1';
+                            face.style.transform = 'translateY(-100px)';
+                            face.style.transition = 'all 3s ease';
+                        }, 10);
+                        
+                        // Eliminar después de la animación
+                        setTimeout(() => {
+                            face.remove();
+                        }, 3000);
+                    }, i * 200);
+                }
+            }
+            
+            // Evento para el botón "No"
+            noBtn.addEventListener('mouseover', moveNoButton);
+            noBtn.addEventListener('click', function() {
+                noClickCount++;
+                
+                // Crear caritas llorando
+                createCryingFaces();
+                
+                // Hacer el botón "Sí" más grande
+                const scaleYes = 1 + (noClickCount * 0.1);
+                yesBtn.style.transform = `scale(${scaleYes})`;
+                
+                // Hacer el botón "No" más pequeño
+                const scaleNo = Math.max(0.3, 1 - noClickCount * 0.15);
+                noBtn.style.transform = `scale(${scaleNo})`;
+                
+                // Cambiar mensaje según la cantidad de clicks en "No"
+                if (noClickCount === 1) {
+                    message.textContent = "¡Vamos, por favor! ¡Somos las mejores amigas! 💔";
+                    message.classList.add('show');
+                } else if (noClickCount === 2) {
+                    message.textContent = "¿En serio me vas a dejar sin San Valentín? 😭";
+                } else if (noClickCount === 3) {
+                    message.textContent = "¡Esto duele más que un corazón roto! 💔";
+                } else if (noClickCount >= 4) {
+                    message.textContent = "¡Okay, okay! Presiona 'Sí' y te perdono 😉";
+                }
+                
+                // Mover el botón "No" a una nueva posición después de hacer clic
+                setTimeout(moveNoButton, 100);
+            });
+            
+            // Evento para el botón "Sí"
+            yesBtn.addEventListener('click', function() {
+                if (!isYesClicked) {
+                    isYesClicked = true;
+                    
+                    // Mostrar mensaje especial
+                    message.textContent = "¡Sabía que dirías que sí! Eres la mejor amiga del mundo 💖";
+                    message.classList.add('show');
+                    
+                    // Efecto visual para el botón "Sí"
+                    yesBtn.style.transform = 'scale(1.2)';
+                    yesBtn.style.background = 'linear-gradient(to bottom, #4CAF50, #2E7D32)';
+                    yesBtn.innerHTML = '<i class="fas fa-heart emoji"></i> ¡Yuju! ¡Gracias amiga <i class="fas fa-heart emoji"></i>';
+                    
+                    // Deshabilitar el botón "No"
+                    noBtn.disabled = true;
+                    noBtn.style.opacity = '0.5';
+                    noBtn.style.cursor = 'not-allowed';
+                    
+                    // Crear muchos corazones
+                    for (let i = 0; i < 30; i++) {
+                        setTimeout(() => {
+                            const heart = document.createElement('div');
+                            heart.classList.add('heart');
+                            heart.innerHTML = '💖';
+                            heart.style.left = Math.random() * 100 + 'vw';
+                            heart.style.animationDuration = (Math.random() * 2 + 3) + 's';
+                            heart.style.fontSize = (Math.random() * 25 + 20) + 'px';
+                            heartsContainer.appendChild(heart);
+                            
+                            setTimeout(() => {
+                                heart.remove();
+                            }, 5000);
+                        }, i * 100);
+                    }
+                    
+                    // Cambiar el título de la página
+                    document.title = "¡Somos San Valentín de amigas! 💕";
+                }
+            });
+            
+            // Para dispositivos táctiles
+            noBtn.addEventListener('touchstart', function(e) {
+                e.preventDefault();
+                moveNoButton();
+            });
+        });
+    </script>
+</body>
+</html>
