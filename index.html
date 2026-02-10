@@ -69,6 +69,10 @@
             margin: 30px 0;
             border: 5px dashed #ff99ac;
             position: relative;
+            min-height: 400px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
         }
         
         .question {
@@ -76,6 +80,14 @@
             color: #c2185b;
             margin-bottom: 40px;
             line-height: 1.4;
+        }
+        
+        .buttons-wrapper {
+            position: relative;
+            min-height: 120px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
         }
         
         .buttons-container {
@@ -86,6 +98,7 @@
             margin-top: 30px;
             position: relative;
             z-index: 20;
+            width: 100%;
         }
         
         .btn {
@@ -343,6 +356,10 @@
             .gift-message {
                 font-size: 1.7rem;
             }
+            
+            .question-container {
+                min-height: 350px;
+            }
         }
         
         @media (max-width: 480px) {
@@ -373,6 +390,10 @@
             .gift-message {
                 font-size: 1.5rem;
             }
+            
+            .question-container {
+                min-height: 380px;
+            }
         }
         
         /* Mejoras para rendimiento en móvil */
@@ -398,13 +419,15 @@
         <div class="question-container">
             <p class="question"><i class="fas fa-heart emoji"></i> ¿Quieres ser mi San Valentín de amigas? <i class="fas fa-heart emoji"></i></p>
             
-            <div class="buttons-container">
-                <button class="btn btn-yes" id="yesBtn">
-                    <i class="fas fa-check-circle emoji"></i> ¡Sí!
-                </button>
-                <button class="btn btn-no" id="noBtn">
-                    <i class="fas fa-times-circle emoji"></i> No
-                </button>
+            <div class="buttons-wrapper">
+                <div class="buttons-container" id="buttonsContainer">
+                    <button class="btn btn-yes" id="yesBtn">
+                        <i class="fas fa-check-circle emoji"></i> ¡Sí!
+                    </button>
+                    <button class="btn btn-no" id="noBtn">
+                        <i class="fas fa-times-circle emoji"></i> No
+                    </button>
+                </div>
             </div>
             
             <div class="gift-message" id="giftMessage">
@@ -465,6 +488,7 @@
             const closePoemBtn = document.getElementById('closePoemBtn');
             const container = document.querySelector('.container');
             const question = document.querySelector('.question');
+            const buttonsWrapper = document.querySelector('.buttons-wrapper');
             
             let noClickCount = 0;
             let isYesClicked = false;
@@ -504,29 +528,29 @@
             createHearts();
             setInterval(() => createHearts(10), 5000);
             
-            // Función para mover el botón "No" optimizada
+            // Función para mover el botón "No" solo dentro del área de botones
             function moveNoButton() {
                 cancelAnimationFrame(animationFrameId);
                 
-                const containerRect = container.getBoundingClientRect();
+                const wrapperRect = buttonsWrapper.getBoundingClientRect();
                 const buttonRect = noBtn.getBoundingClientRect();
                 
-                // Calcular posición aleatoria dentro del contenedor
-                const maxX = containerRect.width - buttonRect.width - 40;
-                const maxY = containerRect.height - buttonRect.height - 40;
+                // Calcular límites dentro del área de botones
+                const maxX = wrapperRect.width - buttonRect.width - 20;
+                const maxY = wrapperRect.height - buttonRect.height - 20;
                 
-                let randomX, randomY;
+                // Posición aleatoria dentro del área permitida
+                let randomX = Math.random() * maxX;
+                let randomY = Math.random() * maxY;
+                
+                // Asegurarse de que no se salga completamente
+                if (randomX < 10) randomX = 10;
+                if (randomY < 10) randomY = 10;
                 
                 // Para las primeras veces, mover menos
                 if (noClickCount < 3) {
-                    randomX = Math.random() * 100 - 50;
-                    randomY = Math.random() * 100 - 50;
-                } else {
-                    randomX = Math.random() * maxX;
-                    randomY = Math.random() * maxY;
-                    
-                    if (randomX < 20) randomX = 20;
-                    if (randomY < 20) randomY = 20;
+                    randomX = Math.random() * 80 - 40;
+                    randomY = Math.random() * 60 - 30;
                 }
                 
                 // Aplicar la transformación de manera suave
@@ -650,6 +674,7 @@
                         yesBtn.style.display = 'none';
                         noBtn.style.display = 'none';
                         message.style.display = 'none';
+                        giftMessage.style.display = 'none';
                         
                         // Crear muchos corazones
                         createHearts(25);
@@ -671,6 +696,7 @@
                 yesBtn.style.display = 'block';
                 noBtn.style.display = 'block';
                 message.style.display = 'block';
+                giftMessage.style.display = 'block';
             });
             
             // Para dispositivos táctiles - optimizado
