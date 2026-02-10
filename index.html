@@ -11,6 +11,7 @@
             padding: 0;
             box-sizing: border-box;
             font-family: 'Comic Sans MS', 'Chalkboard SE', 'Arial Rounded MT Bold', sans-serif;
+            -webkit-tap-highlight-color: transparent;
         }
         
         body {
@@ -24,6 +25,7 @@
             animation: gradientBG 15s ease infinite;
             padding: 20px;
             overflow-x: hidden;
+            touch-action: manipulation;
         }
         
         @keyframes gradientBG {
@@ -37,12 +39,13 @@
             max-width: 800px;
             width: 100%;
             padding: 30px;
-            background-color: rgba(255, 255, 255, 0.9);
+            background-color: rgba(255, 255, 255, 0.95);
             border-radius: 25px;
             box-shadow: 0 15px 35px rgba(0, 0, 0, 0.2);
             position: relative;
             z-index: 10;
             border: 8px solid #ffd700;
+            margin: 20px 0;
         }
         
         h1 {
@@ -96,6 +99,8 @@
             box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
             min-width: 180px;
             position: relative;
+            touch-action: manipulation;
+            user-select: none;
         }
         
         .btn-yes {
@@ -105,25 +110,21 @@
             z-index: 30;
         }
         
-        .btn-yes:hover {
+        .btn-yes:hover, .btn-yes:active {
             background: linear-gradient(to bottom, #ff79b0, #ff4081);
             transform: scale(1.05);
             box-shadow: 0 15px 25px rgba(216, 27, 96, 0.4);
-        }
-        
-        .btn-yes:active {
-            transform: scale(1.1);
         }
         
         .btn-no {
             background: linear-gradient(to bottom, #6a1b9a, #4a148c);
             color: white;
             position: relative;
-            transition: transform 0.3s ease;
+            transition: transform 0.5s ease;
             z-index: 25;
         }
         
-        .btn-no:hover {
+        .btn-no:hover, .btn-no:active {
             background: linear-gradient(to bottom, #8e24aa, #6a1b9a);
         }
         
@@ -133,11 +134,12 @@
         }
         
         .crying-face {
-            position: absolute;
-            font-size: 2rem;
+            position: fixed;
+            font-size: 2.5rem;
             z-index: 5;
             opacity: 0;
             pointer-events: none;
+            user-select: none;
         }
         
         .message {
@@ -148,7 +150,13 @@
             min-height: 60px;
             padding: 15px;
             opacity: 0;
-            transition: opacity 0.5s ease;
+            transition: opacity 0.3s ease;
+            animation: messageAppear 0.5s ease;
+        }
+        
+        @keyframes messageAppear {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
         }
         
         .message.show {
@@ -163,19 +171,30 @@
             height: 100%;
             pointer-events: none;
             z-index: 1;
+            overflow: hidden;
+        }
+        
+        .heart, .crying-face {
+            position: absolute;
+            font-size: 1.8rem;
+            opacity: 0;
+            user-select: none;
+            pointer-events: none;
+            will-change: transform, opacity;
         }
         
         .heart {
-            position: absolute;
             color: #ff4081;
-            font-size: 1.5rem;
-            opacity: 0;
-            animation: float 5s linear infinite;
+            animation: float 5s linear forwards;
+        }
+        
+        .crying-face {
+            animation: floatCrying 4s linear forwards;
         }
         
         @keyframes float {
             0% {
-                transform: translateY(100vh) rotate(0deg);
+                transform: translateY(100vh) rotate(0deg) scale(0.8);
                 opacity: 0;
             }
             10% {
@@ -185,9 +204,87 @@
                 opacity: 1;
             }
             100% {
-                transform: translateY(-100px) rotate(360deg);
+                transform: translateY(-100px) rotate(360deg) scale(1.2);
                 opacity: 0;
             }
+        }
+        
+        @keyframes floatCrying {
+            0% {
+                transform: translateY(100vh) rotate(0deg) scale(1);
+                opacity: 0;
+            }
+            15% {
+                opacity: 1;
+            }
+            85% {
+                opacity: 1;
+            }
+            100% {
+                transform: translateY(-50px) rotate(15deg) scale(0.8);
+                opacity: 0;
+            }
+        }
+        
+        .poem-container {
+            display: none;
+            background-color: rgba(255, 240, 247, 0.95);
+            padding: 30px;
+            border-radius: 20px;
+            margin-top: 30px;
+            border: 5px solid #ffd700;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
+            animation: fadeIn 0.8s ease;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        .gift-message {
+            font-size: 2rem;
+            color: #d81b60;
+            margin-bottom: 25px;
+            font-weight: bold;
+            display: none;
+        }
+        
+        .poem-title {
+            color: #d81b60;
+            font-size: 2rem;
+            margin-bottom: 20px;
+            text-decoration: underline;
+        }
+        
+        .poem {
+            color: #4a148c;
+            font-size: 1.5rem;
+            line-height: 1.6;
+            text-align: left;
+            padding: 0 15px;
+        }
+        
+        .poem p {
+            margin-bottom: 15px;
+            padding-left: 20px;
+            position: relative;
+        }
+        
+        .poem p::before {
+            content: "💖";
+            position: absolute;
+            left: -10px;
+            top: 2px;
+        }
+        
+        .poem-signature {
+            text-align: right;
+            font-style: italic;
+            font-weight: bold;
+            color: #ff4081;
+            margin-top: 25px;
+            font-size: 1.6rem;
         }
         
         .footer {
@@ -196,6 +293,24 @@
             font-size: 1.2rem;
             font-weight: bold;
             text-align: center;
+        }
+        
+        .close-poem-btn {
+            margin-top: 25px;
+            padding: 15px 30px;
+            font-size: 1.3rem;
+            background: linear-gradient(to bottom, #6a1b9a, #4a148c);
+            color: white;
+            border: none;
+            border-radius: 30px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+        }
+        
+        .close-poem-btn:hover {
+            background: linear-gradient(to bottom, #8e24aa, #6a1b9a);
+            transform: scale(1.05);
         }
         
         @media (max-width: 768px) {
@@ -216,6 +331,18 @@
             .buttons-container {
                 gap: 30px;
             }
+            
+            .poem {
+                font-size: 1.3rem;
+            }
+            
+            .crying-face, .heart {
+                font-size: 2rem;
+            }
+            
+            .gift-message {
+                font-size: 1.7rem;
+            }
         }
         
         @media (max-width: 480px) {
@@ -230,12 +357,33 @@
             .btn {
                 padding: 18px 35px;
                 font-size: 1.5rem;
+                min-width: 140px;
             }
             
             .buttons-container {
                 flex-direction: column;
                 align-items: center;
                 gap: 20px;
+            }
+            
+            .message {
+                font-size: 1.5rem;
+            }
+            
+            .gift-message {
+                font-size: 1.5rem;
+            }
+        }
+        
+        /* Mejoras para rendimiento en móvil */
+        @media (hover: none) and (pointer: coarse) {
+            .btn {
+                padding: 20px 35px;
+                min-height: 70px;
+            }
+            
+            .btn:active {
+                transform: scale(0.95);
             }
         }
     </style>
@@ -259,8 +407,44 @@
                 </button>
             </div>
             
+            <div class="gift-message" id="giftMessage">
+                💝 Gracias por aceptar, ten tu regalo 💝
+            </div>
+            
             <div class="message" id="message">
                 ¡Sabía que dirías que sí! Eres la mejor amiga del mundo 💖
+            </div>
+            
+            <div class="poem-container" id="poemContainer">
+                <h2 class="poem-title">Para Mi Mejor Amiga</h2>
+                <div class="poem">
+                    <p>En este día de San Valentín,</p>
+                    <p>quiero decirte algo muy especial,</p>
+                    <p>que aunque no sea tu enamorado,</p>
+                    <p>contigo quiero celebrar.</p>
+                    <br>
+                    <p>Porque las amigas como tú,</p>
+                    <p>son difíciles de encontrar,</p>
+                    <p>siempre estás cuando te necesito,</p>
+                    <p>me sabes escuchar y consolar.</p>
+                    <br>
+                    <p>Eres mi confidente, mi apoyo,</p>
+                    <p>mi cómplice en cada travesura,</p>
+                    <p>contigo me río sin medida,</p>
+                    <p>y comparto mis locuras.</p>
+                    <br>
+                    <p>Así que hoy quiero decirte,</p>
+                    <p>con todo mi corazón,</p>
+                    <p>que valoro nuestra amistad,</p>
+                    <p>más que cualquier canción.</p>
+                    <br>
+                    <p>Feliz San Valentín, amiga,</p>
+                    <p>que este día sea especial,</p>
+                    <p>porque mereces toda la felicidad,</p>
+                    <p>y que nunca te pueda faltar.</p>
+                </div>
+                <p class="poem-signature">Con cariño, tu amiga 💕</p>
+                <button class="close-poem-btn" id="closePoemBtn">Cerrar Poema</button>
             </div>
         </div>
         
@@ -275,39 +459,55 @@
             const yesBtn = document.getElementById('yesBtn');
             const noBtn = document.getElementById('noBtn');
             const message = document.getElementById('message');
+            const giftMessage = document.getElementById('giftMessage');
+            const poemContainer = document.getElementById('poemContainer');
             const heartsContainer = document.getElementById('heartsContainer');
+            const closePoemBtn = document.getElementById('closePoemBtn');
             const container = document.querySelector('.container');
+            const question = document.querySelector('.question');
             
             let noClickCount = 0;
             let isYesClicked = false;
+            let animationFrameId = null;
             
-            // Crear corazones flotantes
-            function createHearts() {
-                for (let i = 0; i < 20; i++) {
+            // Optimizar animaciones para móvil
+            const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
+            
+            // Crear corazones flotantes optimizados
+            function createHearts(count = 15) {
+                for (let i = 0; i < count; i++) {
                     setTimeout(() => {
                         const heart = document.createElement('div');
                         heart.classList.add('heart');
                         heart.innerHTML = '❤️';
                         heart.style.left = Math.random() * 100 + 'vw';
-                        heart.style.animationDuration = (Math.random() * 3 + 4) + 's';
+                        
+                        // Optimizar para móvil
+                        const duration = isMobile ? 4 : (Math.random() * 3 + 4);
+                        heart.style.animationDuration = duration + 's';
                         heart.style.fontSize = (Math.random() * 20 + 15) + 'px';
                         heart.style.opacity = Math.random() * 0.5 + 0.5;
+                        
                         heartsContainer.appendChild(heart);
                         
-                        // Eliminar el corazón después de que termine la animación
+                        // Eliminar después de la animación
                         setTimeout(() => {
-                            heart.remove();
-                        }, 5000);
-                    }, i * 250);
+                            if (heart.parentNode) {
+                                heart.remove();
+                            }
+                        }, duration * 1000);
+                    }, i * 150);
                 }
             }
             
             // Inicializar corazones flotantes
             createHearts();
-            setInterval(createHearts, 6000);
+            setInterval(() => createHearts(10), 5000);
             
-            // Función para mover el botón "No" a una posición aleatoria
+            // Función para mover el botón "No" optimizada
             function moveNoButton() {
+                cancelAnimationFrame(animationFrameId);
+                
                 const containerRect = container.getBoundingClientRect();
                 const buttonRect = noBtn.getBoundingClientRect();
                 
@@ -321,18 +521,16 @@
                 if (noClickCount < 3) {
                     randomX = Math.random() * 100 - 50;
                     randomY = Math.random() * 100 - 50;
-                } 
-                // Después de varios intentos, mover más
-                else {
+                } else {
                     randomX = Math.random() * maxX;
                     randomY = Math.random() * maxY;
                     
-                    // Asegurarse de que no se salga completamente del contenedor
                     if (randomX < 20) randomX = 20;
                     if (randomY < 20) randomY = 20;
                 }
                 
-                // Aplicar la transformación
+                // Aplicar la transformación de manera suave
+                noBtn.style.transition = 'transform 0.5s ease';
                 noBtn.style.transform = `translate(${randomX}px, ${randomY}px)`;
                 
                 // Hacer que el botón "No" sea más pequeño después de cada intento
@@ -340,65 +538,92 @@
                 noBtn.style.transform += ` scale(${scale})`;
             }
             
-            // Crear caritas llorando animadas
+            // Crear caritas llorando optimizadas para móvil
             function createCryingFaces() {
                 const cryingFaces = ['😢', '😭', '🥺', '😔', '😞', '😟', '😿'];
+                const faceCount = isMobile ? 10 : 15;
                 
-                for (let i = 0; i < 15; i++) {
+                for (let i = 0; i < faceCount; i++) {
                     setTimeout(() => {
                         const face = document.createElement('div');
                         face.classList.add('crying-face');
                         face.innerHTML = cryingFaces[Math.floor(Math.random() * cryingFaces.length)];
                         face.style.left = Math.random() * 100 + 'vw';
-                        face.style.top = Math.random() * 100 + 'vh';
-                        face.style.fontSize = (Math.random() * 30 + 20) + 'px';
+                        face.style.top = '100vh';
+                        face.style.fontSize = (Math.random() * 25 + 20) + 'px';
                         
                         document.body.appendChild(face);
                         
-                        // Animación para que aparezcan y floten
-                        setTimeout(() => {
-                            face.style.opacity = '1';
-                            face.style.transform = 'translateY(-100px)';
-                            face.style.transition = 'all 3s ease';
-                        }, 10);
+                        // Iniciar animación inmediatamente
+                        face.style.animationDuration = (Math.random() * 2 + 3) + 's';
                         
                         // Eliminar después de la animación
                         setTimeout(() => {
-                            face.remove();
-                        }, 3000);
-                    }, i * 200);
+                            if (face.parentNode) {
+                                face.remove();
+                            }
+                        }, 4000);
+                    }, i * 100); // Reducido para móvil
                 }
             }
             
-            // Evento para el botón "No"
-            noBtn.addEventListener('mouseover', moveNoButton);
-            noBtn.addEventListener('click', function() {
-                noClickCount++;
+            // Mostrar mensaje inmediatamente (sin retrasos)
+            function showMessage(text) {
+                message.textContent = text;
+                message.style.opacity = '0';
+                message.classList.add('show');
                 
-                // Crear caritas llorando
+                // Forzar reflow para activar la animación
+                void message.offsetWidth;
+                message.style.opacity = '1';
+            }
+            
+            // Evento para el botón "No" optimizado para móvil
+            noBtn.addEventListener('mouseover', moveNoButton);
+            noBtn.addEventListener('touchstart', function(e) {
+                e.preventDefault();
+                moveNoButton();
+                
+                // Mostrar el mensaje inmediatamente
+                noClickCount++;
                 createCryingFaces();
                 
                 // Hacer el botón "Sí" más grande
                 const scaleYes = 1 + (noClickCount * 0.1);
                 yesBtn.style.transform = `scale(${scaleYes})`;
                 
-                // Hacer el botón "No" más pequeño
-                const scaleNo = Math.max(0.3, 1 - noClickCount * 0.15);
-                noBtn.style.transform = `scale(${scaleNo})`;
-                
-                // Cambiar mensaje según la cantidad de clicks en "No"
+                // Mostrar mensajes según la cantidad de clicks
                 if (noClickCount === 1) {
-                    message.textContent = "¡Vamos, por favor! ¡Somos las mejores amigas! 💔";
-                    message.classList.add('show');
+                    showMessage("¡Vamos, por favor! ¡Somos las mejores amigas! 💔");
                 } else if (noClickCount === 2) {
-                    message.textContent = "¿En serio me vas a dejar sin San Valentín? 😭";
+                    showMessage("¿En serio me vas a dejar sin San Valentín? 😭");
                 } else if (noClickCount === 3) {
-                    message.textContent = "¡Esto duele más que un corazón roto! 💔";
+                    showMessage("¡Esto duele más que un corazón roto! 💔");
                 } else if (noClickCount >= 4) {
-                    message.textContent = "¡Okay, okay! Presiona 'Sí' y te perdono 😉";
+                    showMessage("¡Okay, okay! Presiona 'Sí' y te perdono 😉");
+                }
+            });
+            
+            noBtn.addEventListener('click', function() {
+                noClickCount++;
+                createCryingFaces();
+                
+                // Hacer el botón "Sí" más grande
+                const scaleYes = 1 + (noClickCount * 0.1);
+                yesBtn.style.transform = `scale(${scaleYes})`;
+                
+                // Mostrar mensajes según la cantidad de clicks
+                if (noClickCount === 1) {
+                    showMessage("¡Vamos, por favor! ¡Somos las mejores amigas! 💔");
+                } else if (noClickCount === 2) {
+                    showMessage("¿En serio me vas a dejar sin San Valentín? 😭");
+                } else if (noClickCount === 3) {
+                    showMessage("¡Esto duele más que un corazón roto! 💔");
+                } else if (noClickCount >= 4) {
+                    showMessage("¡Okay, okay! Presiona 'Sí' y te perdono 😉");
                 }
                 
-                // Mover el botón "No" a una nueva posición después de hacer clic
+                // Mover el botón "No" a una nueva posición
                 setTimeout(moveNoButton, 100);
             });
             
@@ -407,47 +632,56 @@
                 if (!isYesClicked) {
                     isYesClicked = true;
                     
-                    // Mostrar mensaje especial
-                    message.textContent = "¡Sabía que dirías que sí! Eres la mejor amiga del mundo 💖";
-                    message.classList.add('show');
+                    // Cambiar la pregunta por el mensaje de regalo
+                    question.style.display = 'none';
+                    giftMessage.style.display = 'block';
                     
-                    // Efecto visual para el botón "Sí"
-                    yesBtn.style.transform = 'scale(1.2)';
+                    // Mostrar mensaje especial
+                    showMessage("¡Sabía que dirías que sí! Eres la mejor amiga del mundo 💖");
+                    
+                    // Cambiar el botón "Sí"
+                    yesBtn.innerHTML = '<i class="fas fa-gift emoji"></i> ¡Ver mi regalo! <i class="fas fa-gift emoji"></i>';
                     yesBtn.style.background = 'linear-gradient(to bottom, #4CAF50, #2E7D32)';
-                    yesBtn.innerHTML = '<i class="fas fa-heart emoji"></i> ¡Yuju! ¡Gracias amiga <i class="fas fa-heart emoji"></i>';
+                    yesBtn.style.transform = 'scale(1.1)';
+                    
+                    // Cambiar el evento del botón "Sí" para mostrar el poema
+                    yesBtn.onclick = function() {
+                        poemContainer.style.display = 'block';
+                        yesBtn.style.display = 'none';
+                        noBtn.style.display = 'none';
+                        message.style.display = 'none';
+                        
+                        // Crear muchos corazones
+                        createHearts(25);
+                    };
                     
                     // Deshabilitar el botón "No"
                     noBtn.disabled = true;
                     noBtn.style.opacity = '0.5';
                     noBtn.style.cursor = 'not-allowed';
                     
-                    // Crear muchos corazones
-                    for (let i = 0; i < 30; i++) {
-                        setTimeout(() => {
-                            const heart = document.createElement('div');
-                            heart.classList.add('heart');
-                            heart.innerHTML = '💖';
-                            heart.style.left = Math.random() * 100 + 'vw';
-                            heart.style.animationDuration = (Math.random() * 2 + 3) + 's';
-                            heart.style.fontSize = (Math.random() * 25 + 20) + 'px';
-                            heartsContainer.appendChild(heart);
-                            
-                            setTimeout(() => {
-                                heart.remove();
-                            }, 5000);
-                        }, i * 100);
-                    }
-                    
                     // Cambiar el título de la página
                     document.title = "¡Somos San Valentín de amigas! 💕";
                 }
             });
             
-            // Para dispositivos táctiles
-            noBtn.addEventListener('touchstart', function(e) {
-                e.preventDefault();
-                moveNoButton();
+            // Evento para cerrar el poema
+            closePoemBtn.addEventListener('click', function() {
+                poemContainer.style.display = 'none';
+                yesBtn.style.display = 'block';
+                noBtn.style.display = 'block';
+                message.style.display = 'block';
             });
+            
+            // Para dispositivos táctiles - optimizado
+            if (isMobile) {
+                // Reducir el número de elementos animados para mejorar rendimiento
+                window.addEventListener('touchmove', function(e) {
+                    if (e.target === noBtn) {
+                        e.preventDefault();
+                    }
+                }, { passive: false });
+            }
         });
     </script>
 </body>
